@@ -1,101 +1,119 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Toast, ToastProvider, ToastViewport, ToastDescription, ToastTitle } from "@/components/ui/toast"
+
+export default function QuickPaste() {
+  const [pasteContent, setPasteContent] = useState("")
+  const [pasteUrl, setPasteUrl] = useState("")
+  const [showErrorToast, setShowErrorToast] = useState(false)
+  const [showSuccessToast, setShowSuccessToast] = useState(false)
+  const [showCopyToast, setShowCopyToast] = useState(false)
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (pasteContent.trim() === "") {
+      setShowErrorToast(true)
+      return
+    }
+
+    const uniqueId = Math.random().toString(36).substring(2, 8)
+    const newPasteUrl = `https://quickpaste.com/${uniqueId}`
+    setPasteUrl(newPasteUrl)
+    setShowSuccessToast(true)
+  }
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(pasteUrl)
+    setShowCopyToast(true)
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gray-100 flex flex-col">
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+          <h1 className="text-2xl font-bold text-gray-900">QuickPaste</h1>
         </div>
+      </header>
+
+      <main className="flex-grow container mx-auto px-4 py-8">
+        <Card className="w-full max-w-2xl mx-auto">
+          <CardHeader>
+            <CardTitle>Create a new paste</CardTitle>
+            <CardDescription>
+              Enter your text below and click 'Create Paste' to get a shareable link.
+            </CardDescription>
+          </CardHeader>
+          <form onSubmit={handleSubmit}>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="paste-content">Paste Content</Label>
+                  <Textarea
+                    id="paste-content"
+                    placeholder="Enter your text here..."
+                    value={pasteContent}
+                    onChange={(e) => setPasteContent(e.target.value)}
+                    rows={10}
+                  />
+                </div>
+                {pasteUrl && (
+                  <div className="space-y-2">
+                    <Label htmlFor="paste-url">Paste URL</Label>
+                    <div className="flex space-x-2">
+                      <Input id="paste-url" value={pasteUrl} readOnly />
+                      <Button type="button" onClick={copyToClipboard}>
+                        Copy
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button type="submit">Create Paste</Button>
+            </CardFooter>
+          </form>
+        </Card>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="bg-white shadow-sm mt-8">
+        <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+          <p className="text-center text-gray-500 text-sm">
+            © 2023 QuickPaste. All rights reserved.
+          </p>
+        </div>
       </footer>
+
+      <ToastProvider>
+        {showErrorToast && (
+          <Toast variant="destructive" onOpenChange={(open) => setShowErrorToast(open)}>
+            <ToastTitle className="text-md">Error</ToastTitle>
+            <ToastDescription>Paste content can't be empty</ToastDescription>
+          </Toast>
+        )}
+
+        {showSuccessToast && (
+          <Toast variant="default" onOpenChange={(open) => setShowSuccessToast(open)}>
+            <ToastTitle className="text-md">Success</ToastTitle>
+            <ToastDescription>Your paste has been created!</ToastDescription>
+          </Toast>
+        )}
+
+        {showCopyToast && (
+          <Toast variant="default" onOpenChange={(open) => setShowCopyToast(open)}>
+            <ToastTitle className="text-md">Copied</ToastTitle>
+            <ToastDescription>URL copied to clipboard</ToastDescription>
+          </Toast>
+        )}
+
+        <ToastViewport />
+      </ToastProvider>
     </div>
-  );
+  )
 }
