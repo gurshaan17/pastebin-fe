@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Toast, ToastProvider, ToastViewport, ToastDescription, ToastTitle } from "@/components/ui/toast"
 import { BriefcaseBusiness, Github, Mail } from "lucide-react"
+import Link from "next/link"
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -22,7 +23,7 @@ export default function PastePage({ params }: { params: { id: string } }) {
       const timeout = setTimeout(() => {
         setShowErrorToast(true)
         router.push("/") // Redirect to the main page
-      }, 5000) // 5 seconds timeout
+      }, 15000) // 5 seconds timeout
 
       try {
         const response = await axios.get(`${apiUrl}/get/${id}`)
@@ -32,7 +33,7 @@ export default function PastePage({ params }: { params: { id: string } }) {
         clearTimeout(timeout)
         console.error("Error fetching paste content:", error)
         setShowErrorToast(true)
-        router.push("/") // Redirect to the main page
+        
       }
     }
 
@@ -43,7 +44,9 @@ export default function PastePage({ params }: { params: { id: string } }) {
     <div className="min-h-screen bg-gray-100 flex flex-col">
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-2xl font-bold text-gray-900">Quick Paste</h1>
+            <Link href='/'>
+                <h1 className="text-2xl font-bold text-gray-900">Quick Paste</h1>
+            </Link>
         </div>
       </header>
 
@@ -61,7 +64,32 @@ export default function PastePage({ params }: { params: { id: string } }) {
               )}
             </div>
           </CardContent>
-          
+          <footer className="mt-auto flex justify-center gap-4 py-4">
+                <a
+                    href="mailto:gurshaansinghd@gmail.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-blue-500 transition-colors"
+                >
+                    <Mail className="w-6 h-6" />
+                </a>
+                <a
+                    href="https://github.com/gurshaan17/pastebin-fe"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-blue-500 transition-colors"
+                >
+                    <Github className="w-6 h-6" />
+                </a>
+                <a
+                  href="https://gurshaan.xyz" // Replace with your actual portfolio URL
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-blue-500 transition-colors"
+                >
+                  <BriefcaseBusiness className="w-6 h-6" /> 
+                </a>
+      </footer>
         </Card>
         
       </main>

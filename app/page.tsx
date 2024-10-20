@@ -99,7 +99,7 @@ export default function QuickPaste() {
                     <Mail className="w-6 h-6" />
                 </a>
                 <a
-                    href="https://github.com/gurshaan17/"
+                    href="https://github.com/gurshaan17/pastebin-fe"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-600 hover:text-blue-500 transition-colors"
