@@ -1,5 +1,6 @@
 "use client"
 
+import axios from "axios"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -7,6 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Toast, ToastProvider, ToastViewport, ToastDescription, ToastTitle } from "@/components/ui/toast"
+const apiUrl = process.env.NEXT_PUBLIC_API_URL 
+const feUrl = process.env.NEXT_PUBLIC_FE_URL
 
 export default function QuickPaste() {
   const [pasteContent, setPasteContent] = useState("")
@@ -15,17 +18,23 @@ export default function QuickPaste() {
   const [showSuccessToast, setShowSuccessToast] = useState(false)
   const [showCopyToast, setShowCopyToast] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (pasteContent.trim() === "") {
       setShowErrorToast(true)
       return
     }
 
-    const uniqueId = Math.random().toString(36).substring(2, 8)
-    const newPasteUrl = `https://quickpaste.com/${uniqueId}`
-    setPasteUrl(newPasteUrl)
-    setShowSuccessToast(true)
+
+    try {
+      const response = await axios.post(`${apiUrl}/new`,{
+        content: pasteContent
+      })
+      setPasteUrl(`${feUrl}/${response.data.data.id}`)
+      setShowSuccessToast(true)
+    } catch (error) {
+      console.error('Unexpected error:', error);
+    }
   }
 
   const copyToClipboard = () => {
