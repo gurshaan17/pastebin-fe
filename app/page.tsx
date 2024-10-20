@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Toast, ToastProvider, ToastViewport, ToastDescription, ToastTitle } from "@/components/ui/toast"
+import { Mail, BriefcaseBusiness, Github } from "lucide-react"
 const apiUrl = process.env.NEXT_PUBLIC_API_URL 
 const feUrl = process.env.NEXT_PUBLIC_FE_URL
 
@@ -88,16 +89,34 @@ export default function QuickPaste() {
               <Button type="submit">Create Paste</Button>
             </CardFooter>
           </form>
+          <footer className="mt-auto flex justify-center gap-4 py-4">
+                <a
+                    href="mailto:gurshaansinghd@gmail.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-blue-500 transition-colors"
+                >
+                    <Mail className="w-6 h-6" />
+                </a>
+                <a
+                    href="https://github.com/gurshaan17/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-blue-500 transition-colors"
+                >
+                    <Github className="w-6 h-6" />
+                </a>
+                <a
+                  href="https://gurshaan.xyz" // Replace with your actual portfolio URL
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-blue-500 transition-colors"
+                >
+                  <BriefcaseBusiness className="w-6 h-6" /> 
+                </a>
+      </footer>
         </Card>
       </main>
-
-      <footer className="bg-white shadow-sm mt-8">
-        <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-gray-500 text-sm">
-            © 2023 QuickPaste. All rights reserved.
-          </p>
-        </div>
-      </footer>
 
       <ToastProvider>
         {showErrorToast && (
