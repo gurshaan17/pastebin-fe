@@ -11,7 +11,7 @@ import Link from "next/link"
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 export default function PastePage({ params }: { params: { id: string } }) {
-  const id = params.id;
+  const id: string = params.id;
   const router = useRouter();
   const [pasteContent, setPasteContent] = useState("")
   const [showErrorToast, setShowErrorToast] = useState(false)
@@ -26,7 +26,8 @@ export default function PastePage({ params }: { params: { id: string } }) {
       }, 15000) // 5 seconds timeout
 
       try {
-        const response = await axios.get(`${apiUrl}/get/${id}`)
+        console.log(`first: ${apiUrl}/get/${id}`)
+        const response = await axios.get(`https://pastebin-p7sm.onrender.com/get/${id}`)
         clearTimeout(timeout) // Clear the timeout if the request completes in time
         setPasteContent(response.data.data.content)
       } catch (error) {
